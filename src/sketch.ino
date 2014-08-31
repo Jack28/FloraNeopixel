@@ -33,10 +33,10 @@ char character;
 
 void run(String command){
 	// sprint command and arguments
-//	char argv[3][10] = {0};
-//	split(command,(char**)argv);
+	String argv[3] = {0};
+	split(command,argv);
 
-	if (command == "on")//argv[0] == "on")
+	if (argv[0] == "on")
 		colorWipe(strip.Color(255,255,255),50);
 	if (command == "off")
 		colorWipe(strip.Color(0,0,0),50);
@@ -159,16 +159,29 @@ uint32_t Wheel(byte WheelPos) {
   }
 }
 
-void split(String in,char** out){
+void split(String in,String* out){
+	Serial.println(in);
+	delay(1000);
+	for (int i=0;i<3;i++)
+		Serial.println(out[i]);
+	Serial.println(in);
+	Serial.println(in.length());
+	delay(1000);
 	int argc=0;
 	int pos=0;
 	for (int i=0;i<in.length();i++){
+		for (int i=0;i<3;i++){
+			Serial.print("inloop ");
+			Serial.println(out[i]);
+		}
+		delay(200);
+		Serial.println(i+" "+in.length());
 		if (in[i] == ' '){
-			out[argc][pos]=0;
+			out[argc].concat("\0");
 			argc++;
 			pos=0;
 		}else{
-			out[argc][pos]=in[i];
+			out[argc].concat(in[i]);
 			pos++;
 		}
 	}
