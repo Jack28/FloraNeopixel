@@ -36,11 +36,21 @@ void run(String command){
 	String argv[3] = {0};
 	split(command,argv);
 
+	char buf[10]={0};
+	argv[2].toCharArray(buf,argv[2].length());
+	int num=atoi(buf);
+	Serial.println(num);
+
 	if (argv[0] == "on")
-		colorWipe(strip.Color(255,255,255),50);
-	if (command == "off")
+		if (argv[1] == "")
+			colorWipeNum(strip.Color(255,255,255),50,num);
+		if (argv[1] == "red")
+			colorWipeNum(strip.Color(255,0,0),50,num);
+		if (argv[1] == "green")
+			colorWipeNum(strip.Color(0,255,0),50,num);
+	if (argv[0] == "off")
 		colorWipe(strip.Color(0,0,0),50);
-	if (command == "help")
+	if (argv[0] == "help")
 		Serial.println("[on] or [off]");
 }
 
@@ -79,6 +89,16 @@ void loop()
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
       strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+  }
+}
+
+// Fill the dots one after the other with a color
+void colorWipeNum(uint32_t c, uint8_t wait, uint8_t num) {
+  uint32_t off = strip.Color(0,0,0);
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, i>=num?off:c);
       strip.show();
       delay(wait);
   }
@@ -160,31 +180,16 @@ uint32_t Wheel(byte WheelPos) {
 }
 
 void split(String in,String* out){
-	Serial.println(in);
-	delay(1000);
-	for (int i=0;i<3;i++)
-		Serial.println(out[i]);
-	Serial.println(in);
-	Serial.println(in.length());
-	delay(1000);
 	int argc=0;
-	int pos=0;
 	for (int i=0;i<in.length();i++){
-		for (int i=0;i<3;i++){
-			Serial.print("inloop ");
-			Serial.println(out[i]);
-		}
-		delay(200);
-		Serial.println(i+" "+in.length());
-		if (in[i] == ' '){
+		if (in[i] == ' ' || in[i] == '\n' || in[i] == '\r'){
 			out[argc].concat("\0");
 			argc++;
-			pos=0;
 		}else{
 			out[argc].concat(in[i]);
-			pos++;
 		}
 	}
+	out[argc].concat(" ");
 	for (int i=0;i<3;i++)
 		Serial.println(out[i]);
 }
