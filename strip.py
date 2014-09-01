@@ -38,12 +38,14 @@ class LEDstrip:
             (r,g,b)=self.LEDstates[i]
             self.setBit(i,r,g,b)
 
-    def shift(self,offset):
-        tmp = self.LEDstates[::]
-        for i in range(0,self.NUM_LEDS):
-            self.LEDstates[(i+offset)%self.NUM_LEDS]=tmp[i]
-        self.stateToRing()
-
+    def shift(self,offset,n=1,delay=0):
+        for i in range(0,n):
+            tmp = self.LEDstates[::]
+            self.LEDstates=tmp[offset:]+tmp[:offset]
+            self.stateToRing()
+            if n>1:
+                self.show()
+            sleep(delay)
 
 
 
