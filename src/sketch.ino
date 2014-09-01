@@ -69,11 +69,6 @@ void run(String command){
 	g = atoi(cg);
 	b = atoi(cb);
 
-	Serial.println(i);
-	Serial.println(r);
-	Serial.println(g);
-	Serial.println(b);
-
 	strip.setPixelColor(i,strip.Color(r,g,b));
 }
 
@@ -81,9 +76,7 @@ void loop()
 {
 	while(Serial.available()) {
 		character = Serial.read();
-		Serial.print(character);
 		if (character == '\n' || character == '\r' || character == 0){
-			Serial.println(content);
 			content.concat(character);
 			run(content);
 			content="";
