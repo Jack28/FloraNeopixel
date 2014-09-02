@@ -22,8 +22,8 @@ void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
 
-  colorWipe(strip.Color(255,255,255),50);
-  colorWipe(strip.Color(0,0,0),50);
+  colorWipe(strip.Color(155,155,155),20);
+  colorWipe(strip.Color(0,0,0),0);
   Serial.begin(9600);
 }
 
