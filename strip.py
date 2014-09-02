@@ -36,7 +36,7 @@ class LEDstrip:
     def stateToRing(self):
         for i in range(0,self.NUM_LEDS):
             (r,g,b)=self.LEDstates[i]
-            self.setBit(i,r,g,b)
+            self.setBit(i,r if r>0 else 0,g if g>0 else 0,b if b>0 else 0)
 
     def shift(self,offset,n=1,delay=0):
         for i in range(0,n):
@@ -47,6 +47,14 @@ class LEDstrip:
                 self.show()
             sleep(delay)
 
+    def dim(self,delay=0,stepsize=10):
+        for a in range(0,255/stepsize):
+            for i in range(0,self.NUM_LEDS):
+                (r,g,b)=self.LEDstates[i]
+                self.LEDstates[i]=(r-stepsize,g-stepsize,b-stepsize)
+            self.stateToRing()
+            self.show()
+            sleep(delay)
 
 
 if __name__ == "__main__":

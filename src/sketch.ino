@@ -25,7 +25,6 @@ void setup() {
   colorWipe(strip.Color(255,255,255),50);
   colorWipe(strip.Color(0,0,0),50);
   Serial.begin(9600);
-  Serial.println("Hello World!");
 }
 
 String content = "";
