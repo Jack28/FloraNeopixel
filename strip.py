@@ -41,9 +41,12 @@ class LEDstrip:
     def show(self):
         self.ser.write("show\n")
 
-    def setRing(self,red,blu,gre):
-        for i in range(0,self.NUM_LEDS):
+    def setBits(self,iterable,red,blu,gre):
+        for i in iterable:
             self.setBit(i,red,blu,gre)
+
+    def setRing(self,red,blu,gre):
+        self.setBits(range(1,self.NUM_LEDS),red,blu,gre)
 
     def clear(self):
         self.setRing(0,0,0)

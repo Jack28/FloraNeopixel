@@ -8,12 +8,11 @@ from twisted.internet import protocol, reactor
 strip = strip.LEDstrip()
 
 def flash():
-    strip.setRing(55,0,0)
-    strip.show()
-    sleep(0.2)
-    strip.clear()
-    strip.show()
-    sleep(0.2)
+    for i in range(0,16,4):
+        strip.setBits(range(i,i+4),55,0,0)
+        strip.show()
+        sleep(0.2)
+    strip.dim(-255,0.1)
 
 class MyProcessProtocol(protocol.ProcessProtocol):
 
