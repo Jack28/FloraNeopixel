@@ -53,11 +53,21 @@ void run(String command){
 	}
 
 	char buf[13]={0};
-
+	int digits[19]={0};
+	char tmp;
 	command.toCharArray(buf,command.length());
+	for (int i=0;i<13;i++){
+		tmp=toupper(buf[i]);
+		digits[i]=(tmp >= 'A') ? tmp - 'A' + 10 : tmp -'0';
+	}
 
 	int led,r,g,b;
-	sscanf(buf, "%1x%2x%2x%2x", &led,&r,&g,&b);
+	led=digits[0];
+	r=digits[1]*16+digits[2];
+	g=digits[3]*16+digits[4];
+	b=digits[5]*16+digits[6];
+
+////	sscanf(buf, "%1x%2x%2x%2x", &led,&r,&g,&b);
 //	Serial.print(led);
 //	Serial.print(" ");
 //	Serial.print(r);
