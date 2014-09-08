@@ -35,11 +35,11 @@ class LEDstrip:
         g = g   if g   > 0 else 0
         b = blu if blu < 255 else 255
         b = b   if b   > 0 else 0
-        self.ser.write("%01x%02x%02x%02x\n"%(led,r,g,b))
-#        print          "%01x%02x%02x%02x"  %(led,r,g,b)
+        self.ser.write("%01x%02x%02x%02x"%(led,r,g,b))
+#        print          "%01x%02x%02x%02x"%(led,r,g,b)
 
     def show(self):
-        self.ser.write("show\n")
+        self.ser.write("s")
 
     def setBits(self,iterable,red,blu,gre):
         for i in iterable:

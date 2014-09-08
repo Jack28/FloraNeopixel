@@ -15,6 +15,8 @@ strip.show()
 # 0:19.14elapsed
 # after ssprintf
 # 0:15.88elapsed
+# after no \n, show -> s
+# 0:13.28elapsed
 
 for i in range(0,10000):
     strip.setBit(i%16,i%255,i/40,0)

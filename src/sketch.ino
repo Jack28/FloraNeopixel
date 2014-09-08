@@ -44,10 +44,13 @@ void setup() {
 
 String content = "";
 char character;
+int pos=0;
 
 void run(String command){
 	// 2 3 3 3 --- 11
-	if (command == "show\n" || command == "show\r" || command == "show\0"){
+//	Serial.print("command=");
+//	Serial.println(command);
+	if (command == "showxxx" || command == "s"){
 		strip.show();
 		return;
 	}
@@ -55,7 +58,7 @@ void run(String command){
 	char buf[13]={0};
 	int digits[19]={0};
 	char tmp;
-	command.toCharArray(buf,command.length());
+	command.toCharArray(buf,command.length()+1);
 	for (int i=0;i<13;i++){
 		tmp=toupper(buf[i]);
 		digits[i]=(tmp >= 'A') ? tmp - 'A' + 10 : tmp -'0';
@@ -83,14 +86,18 @@ void loop()
 {
 	while(Serial.available()) {
 		character = Serial.read();
-		if (character == '\n' || character == '\r' || character == 0){
+		if (pos > 5 || character == 's'){
 			content.concat(character);
 			run(content);
 			content="";
 			character=0;
+			pos=0;
 		} else {
 			content.concat(character);
+			pos++;
 		}
+//			Serial.println(pos);
+//			Serial.println(content);
 	}
 }
 

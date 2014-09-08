@@ -22,6 +22,6 @@ def showState(num):
 
     strip.show()
 
-for i in range(0,1024):
+for i in range(0,int(sys.argv[1])):
     #sys.argv[1]
     showState(int(i))
