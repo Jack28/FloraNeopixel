@@ -10,7 +10,7 @@ if (sys.argv[1] == "ok"):
     strip.setRing(0,55,0)
     strip.show()
     sleep(0.2)
-    strip.dim(-255,0.03)
+    strip.dim(-65,0.03)
 if (sys.argv[1] == "no"):
     for i in range(0,3):
         strip.setRing(55,0,0)

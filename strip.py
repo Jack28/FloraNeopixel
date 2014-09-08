@@ -29,12 +29,12 @@ class LEDstrip:
 
     def setBit(self,led,red,gre,blu):
         self.LEDstates[led]=(red,gre,blu)
-        r = red if red > 0 else 0
-        r = red if red < 256 else 255
-        g = gre if gre > 0 else 0
-        g = gre if gre < 256 else 255
-        b = blu if blu > 0 else 0
-        b = blu if blu < 256 else 255
+        r = red if red < 255 else 255
+        r = r   if r   > 0 else 0
+        g = gre if gre < 255 else 255
+        g = g   if g   > 0 else 0
+        b = blu if blu < 255 else 255
+        b = b   if b   > 0 else 0
         self.ser.write("%01x%02x%02x%02x\n"%(led,r,g,b))
 #        print          "%01x%02x%02x%02x"  %(led,r,g,b)
 
