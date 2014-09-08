@@ -37,7 +37,7 @@ void setup() {
 //      strip.show();
 //	}
 //
-  colorWipe(strip.Color(155,155,155),20);
+  colorWipe(strip.Color(55,55,55),20);
   colorWipe(strip.Color(0,0,0),0);
   Serial.begin(9600);
 }
@@ -56,34 +56,17 @@ void run(String command){
 
 	command.toCharArray(buf,command.length());
 
-	char ci[3]={0};
-	char cr[4]={0};
-	char cg[4]={0};
-	char cb[4]={0};
+	int led,r,g,b;
+	sscanf(buf, "%1x%2x%2x%2x", &led,&r,&g,&b);
+//	Serial.print(led);
+//	Serial.print(" ");
+//	Serial.print(r);
+//	Serial.print(" ");
+//	Serial.print(g);
+//	Serial.print(" ");
+//	Serial.println(b);
 
-	ci[0]=buf[0];
-	ci[1]=buf[1];
-
-	cr[0]=buf[2];
-	cr[1]=buf[3];
-	cr[2]=buf[4];
-
-	cg[0]=buf[5];
-	cg[1]=buf[6];
-	cg[2]=buf[7];
-
-	cb[0]=buf[8];
-	cb[1]=buf[9];
-	cb[2]=buf[10];
-
-	int i,r,g,b;
-
-	i = atoi(ci);
-	r = atoi(cr);
-	g = atoi(cg);
-	b = atoi(cb);
-
-	strip.setPixelColor(i,strip.Color(r,g,b));
+	strip.setPixelColor(led,strip.Color(r,g,b));
 }
 
 void loop()

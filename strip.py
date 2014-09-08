@@ -35,8 +35,8 @@ class LEDstrip:
         g = gre if gre < 256 else 255
         b = blu if blu > 0 else 0
         b = blu if blu < 256 else 255
-        self.ser.write("%02d%03d%03d%03d\n"%(led,red if red>0 else 0,gre if gre>0 else 0,blu if blu>0 else 0))
-    #    print     "%02d%03d%03d%03d"  %(led,red,blu,gre)
+        self.ser.write("%01x%02x%02x%02x\n"%(led,r,g,b))
+#        print          "%01x%02x%02x%02x"  %(led,r,g,b)
 
     def show(self):
         self.ser.write("show\n")
