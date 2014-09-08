@@ -1,7 +1,9 @@
 #!/usr/bin/env python2
 
 import serial
+import random
 from time import sleep
+import sys
 
 class LEDstrip:
     LEDstates = []
@@ -10,13 +12,20 @@ class LEDstrip:
         self.TTY=TTY
         self.NUM_LEDS=NUM_LEDS
         self.LEDstates = [(0,0,0) for i in range(0,self.NUM_LEDS)]
-        self.ser = serial.Serial(TTY, 9600)
+        try:
+            self.ser = serial.Serial(TTY, 9600)
 
-        if not self.ser.isOpen():
-            self.ser.open()
+            if not self.ser.isOpen():
+                self.ser.open()
+        except:
+            print "ERROR opening serial connection"
+            sys.exit()
 
     def __del__(self):
-        self.ser.close()
+        try:
+            self.ser.close()
+        except:
+            0
 
     def setBit(self,led,red,gre,blu):
         self.LEDstates[led]=(red,gre,blu)
@@ -44,6 +53,15 @@ class LEDstrip:
             (r,g,b)=self.LEDstates[i]
             self.setBit(i,r,g,b)
 
+    def dark(self,timeout=0.1):
+        tmp = self.LEDstates[::]
+        self.clear()
+        self.show()
+        sleep(timeout)
+        self.LEDstates = tmp
+        self.stateToRing()
+        self.show()
+
     def shift(self,offset,n=1,delay=0):
         for i in range(0,n):
             tmp = self.LEDstates[::]
@@ -59,7 +77,6 @@ class LEDstrip:
             for i in range(0,self.NUM_LEDS):
                 (r,g,b)=self.LEDstates[i]
                 (r0,g0,b0)=tmp[i]
-                print self.LEDstates
                 self.LEDstates[i]=(
                         0 if r0==0 else r-(stepsize),
                         0 if g0==0 else g-(stepsize),
@@ -70,17 +87,34 @@ class LEDstrip:
 
 #    def rotateColor(self):
 
+    def wheel(self,pos):
+        i = 256/self.NUM_LEDS*pos
+        if i < 85:
+            return (i*3,255-i*3,0)
+        elif i < 170:
+            return (255-(i-85)*3,0,(i-85)*3)
+        else:
+            return (0,(i-170)*3,255-(i-170)*3)
+
+
     def rainbow(self):
-        for j in range(0,self.NUM_LEDS):
-            i = 256/self.NUM_LEDS*j
-            if i < 85:
-                self.LEDstates[j]=(i*3,255-i*3,0)
-            elif i < 170:
-                self.LEDstates[j]=(255-(i-85)*3,0,(i-85)*3)
-            else:
-                self.LEDstates[j]=(0,(i-170)*3,255-(i-170)*3)
+        for i in range(0,self.NUM_LEDS):
+            self.LEDstates[i]=self.wheel(i)
         self.stateToRing()
         self.show()
+
+    def randomColor(self):
+        for i in range(0,self.NUM_LEDS):
+            self.LEDstates[i]=(random.randint(0,256)/2,random.randint(0,256),random.randint(0,256))
+        self.stateToRing()
+        self.show()
+
+    def shiftColor(self,offset):
+        c = 256/self.NUM_LEDS
+        for i in range(0,self.NUM_LEDS):
+            (r,g,b) = self.LEDstates[i]
+            
+            self.LEDstates[i]=()
 
 
 if __name__ == "__main__":

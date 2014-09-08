@@ -22,6 +22,21 @@ void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
 
+//  
+//	int c1=strip.Color(50,50,50);
+//	int c0=strip.Color(0,0,0);
+//	 for(int i=0;i<1024;i++){ // count from 0 to 1023
+//		int bin=log(i) / log(2); // get bit count
+//		for(int j=0;j<bin;j++){ // go from 0 to bit count
+//			if ((i>>(i-j))%2) // shift
+//    		 strip.setPixelColor(j,c1);
+//			else
+//    		 strip.setPixelColor(j,c0);
+//		}
+//		delay(50);
+//      strip.show();
+//	}
+//
   colorWipe(strip.Color(155,155,155),20);
   colorWipe(strip.Color(0,0,0),0);
   Serial.begin(9600);

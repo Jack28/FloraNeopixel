@@ -6,8 +6,6 @@ import sys
 
 strip = strip.LEDstrip()
 
-
-
 if (sys.argv[1] == "ok"):
     strip.setRing(0,55,0)
     strip.show()
