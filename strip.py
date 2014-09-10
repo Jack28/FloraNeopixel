@@ -34,21 +34,20 @@ class LEDstrip:
         for i in self.layer:
                 i.clear()
 
-    def show(self):
-        red=gre=blu=0
-        for l in range(0,self.NUM_LEDS):
-            for i in self.layer:
-                (rtm,gtm,btm)=i.LEDstates[l]
-                (red,gre,blu)=(red+rtm,gre+gtm,blu+btm)
-            r = red if red < 255 else 255
-            r = r   if r   > 0 else 0
-            g = gre if gre < 255 else 255
-            g = g   if g   > 0 else 0
-            b = blu if blu < 255 else 255
-            b = b   if b   > 0 else 0
-            self.ser.write("%01x%02x%02x%02x"%(l,r,g,b))
+    def setBit(self,led,red,gre,blu):
+        for i in self.layer:
+            (rtm,gtm,btm)=i.LEDstates[led]
+            (red,gre,blu)=(red+rtm,gre+gtm,blu+btm)
+        r = red if red < 255 else 255
+        r = r   if r   > 0 else 0
+        g = gre if gre < 255 else 255
+        g = g   if g   > 0 else 0
+        b = blu if blu < 255 else 255
+        b = b   if b   > 0 else 0
+        self.ser.write("%01x%02x%02x%02x"%(led,r,g,b))
 #            print          "%01x%02x%02x%02x"%(l,r,g,b)
-            red=gre=blu=0
+
+    def show(self):
         self.ser.write("s")
 
 class LEDlayer:
@@ -61,6 +60,7 @@ class LEDlayer:
 
     def setBit(self,led,red,gre,blu):
         self.LEDstates[led]=(red,gre,blu)
+        self.strip.setBit(led,red,gre,blu)
 #        r = red if red < 255 else 255
 #        r = r   if r   > 0 else 0
 #        g = gre if gre < 255 else 255
