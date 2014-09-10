@@ -17,7 +17,9 @@ strip.show()
 # 0:15.88elapsed
 # after no \n, show -> s
 # 0:13.28elapsed
+# with layers
+# 1:48.88elapsed
 
 for i in range(0,10000):
-    strip.setBit(i%16,i%255,i/40,0)
+    strip.layer[0].setBit(i%16,i%255,i/40,0)
     strip.show()
