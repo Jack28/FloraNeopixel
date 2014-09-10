@@ -18,7 +18,7 @@ def showState(num):
 
     for i in range(0,len(state)):
         if state[len(state)-i-1] == "1":
-            strip.setBit(15-i,0,0,255)
+            strip.layer[0].setBit(15-i,0,0,255)
 
     strip.show()
 

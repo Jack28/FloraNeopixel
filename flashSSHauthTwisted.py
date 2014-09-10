@@ -9,10 +9,10 @@ strip = strip.LEDstrip()
 
 def flash():
     for i in range(0,16,4):
-        strip.setBits(range(i,i+4),55,0,0)
+        strip.layer[0].setBits(range(i,i+4),55,0,0)
         strip.show()
         sleep(0.2)
-    strip.dim(-255,0.1)
+    strip.layer[0].dim(-255,0.1)
 
 class MyProcessProtocol(protocol.ProcessProtocol):
 
