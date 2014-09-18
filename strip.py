@@ -5,6 +5,9 @@ import random
 from time import sleep
 import sys
 
+# ./test.py | nc 192.168.43.1 7777
+# dd if=<(nc -v -l -p 7777) of=/dev/ttyACM0 bs=1
+
 class LEDstrip:
     def __init__(self,TTY='/dev/ttyACM0',NUM_LEDS=16,layer=1):
         self.TTY=TTY
@@ -12,13 +15,14 @@ class LEDstrip:
         self.layer=[]
         for i in range(0,layer):
             self.layer.append(LEDlayer(self,NUM_LEDS))
-        try:
-            self.ser = serial.Serial(TTY, 9600)
-            if not self.ser.isOpen():
-                self.ser.open()
-        except:
-            print "ERROR opening serial connection"
-            sys.exit()
+        if not self.TTY == "-":
+            try:
+                self.ser = serial.Serial(TTY, 9600)
+                if not self.ser.isOpen():
+                    self.ser.open()
+            except:
+                print "ERROR opening serial connection"
+    #            sys.exit()
         self.clear()
         self.show()
 
@@ -32,9 +36,13 @@ class LEDstrip:
 
     def clear(self):
         for i in self.layer:
-                i.clear()
+            i.clear()
+        for l in self.layer:
+            l.setRing(0,0,0)
+        self.update()
 
-    def setBit(self,led,red,gre,blu):
+    def updateBit(self,led):
+        red=gre=blu=0
         for i in self.layer:
             (rtm,gtm,btm)=i.LEDstates[led]
             (red,gre,blu)=(red+rtm,gre+gtm,blu+btm)
@@ -44,11 +52,22 @@ class LEDstrip:
         g = g   if g   > 0 else 0
         b = blu if blu < 255 else 255
         b = b   if b   > 0 else 0
-        self.ser.write("%01x%02x%02x%02x"%(led,r,g,b))
-#            print          "%01x%02x%02x%02x"%(l,r,g,b)
+        if not self.TTY == "-":
+            self.ser.write("%01x%02x%02x%02x"%(led,r,g,b))
+#        print          "%01x%02x%02x%02x"%(led,r,g,b)
+        else:
+            sys.stdout.write("%01x%02x%02x%02x"%(led,r,g,b))
 
     def show(self):
-        self.ser.write("s")
+        if not self.TTY == "-":
+            self.ser.write("s")
+        else:
+            sys.stdout.write("s")
+
+    def update(self):
+        for i in self.layer:
+            i.stateToRing()
+
 
 class LEDlayer:
     LEDstates = []
@@ -60,7 +79,7 @@ class LEDlayer:
 
     def setBit(self,led,red,gre,blu):
         self.LEDstates[led]=(red,gre,blu)
-        self.strip.setBit(led,red,gre,blu)
+        self.strip.updateBit(led)
 #        r = red if red < 255 else 255
 #        r = r   if r   > 0 else 0
 #        g = gre if gre < 255 else 255
@@ -119,34 +138,57 @@ class LEDlayer:
 
 #    def rotateColor(self):
 
-    def wheel(self,pos):
+    def wheel(self,pos,intensity=1):
         i = 256/self.NUM_LEDS*pos
         if i < 85:
-            return (i*3,255-i*3,0)
+            return ((i*3)/intensity,(255-i*3)/intensity,0)
         elif i < 170:
-            return (255-(i-85)*3,0,(i-85)*3)
+            return ((255-(i-85)*3)/intensity,0,((i-85)*3)/intensity)
         else:
-            return (0,(i-170)*3,255-(i-170)*3)
+            return (0,((i-170)*3)/intensity,(255-(i-170)*3)/intensity)
 
 
-    def rainbow(self):
+    def rainbow(self,intensity=1):
         for i in range(0,self.NUM_LEDS):
-            self.LEDstates[i]=self.wheel(i)
+            self.LEDstates[i]=self.wheel(i,intensity)
         self.stateToRing()
         self.strip.show()
 
     def randomColor(self):
         for i in range(0,self.NUM_LEDS):
-            self.LEDstates[i]=(random.randint(0,256)/2,random.randint(0,256),random.randint(0,256))
+            self.LEDstates[i]=(random.randint(0,256),random.randint(0,256),random.randint(0,256))
         self.stateToRing()
         self.strip.show()
 
+    # unfinished
     def shiftColor(self,offset):
         c = 256/self.NUM_LEDS
         for i in range(0,self.NUM_LEDS):
             (r,g,b) = self.LEDstates[i]
-            
             self.LEDstates[i]=()
+
+    # unfinished
+    def transition(self,toLayer):
+        for i in range(0,20):
+            for i in range(0,self.NUM_LEDS):
+                (r1,g1,b1) = self.LEDstates[i]
+                (r2,g2,b2) = toLayer.LEDstates[i]
+                r = r1+((r2-r1)/20)
+                g = g1+((g2-g1)/20)
+                b = b1+((b2-b1)/20)
+
+                r = r if r>0 else r*-1
+                g = g if g>0 else g*-1
+                b = b if b>0 else b*-1
+
+                self.setBit(i,r,g,b)
+            self.strip.update()
+            self.strip.show()
+    #        sleep(0.1)
+   #     self.LEDstates=toLayer.LEDstates
+        self.strip.update()
+        self.strip.show()
+
 
 
 if __name__ == "__main__":
