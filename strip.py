@@ -185,7 +185,7 @@ class LEDlayer:
             self.strip.update()
             self.strip.show()
     #        sleep(0.1)
-   #     self.LEDstates=toLayer.LEDstates
+        self.LEDstates=toLayer.LEDstates[::]
         self.strip.update()
         self.strip.show()
 
