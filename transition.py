@@ -19,16 +19,16 @@ newLayer2=strip.LEDlayer(s)
 #    s.layer[0].setBit(15-i,0,0,10+5*(i+1))
 
 while True:
-    s.layer[0].setBits(range(0,16),0,25,0)
+    s.layer[0].setBits(range(0,16),0,55,0)
     newLayer2.setBits(range(0,8),0,0,0)
-    newLayer2.setBits(range(8,16),50,0,0)
+    newLayer2.setBits(range(8,16),250,0,0)
 
     for i in range(0,3):
         s.layer[0].transition(newLayer2)
         sleep(1)
         s.show()
 
-        s.layer[0].setBits(range(0,16),0,25,0)
+        s.layer[0].setBits(range(0,16),0,55,0)
         s.show()
         sleep(1)
 

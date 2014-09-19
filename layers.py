@@ -12,9 +12,9 @@ s.clear()
 s.show()
 
 newLayer1=strip.LEDlayer(s)
-newLayer1.setBits(range(0,8),5,0,0)
+newLayer1.setBits(range(0,8),50,0,0)
 newLayer2=strip.LEDlayer(s)
-newLayer2.setBits(range(8,16),0,5,0)
+newLayer2.setBits(range(8,16),0,50,0)
 
 #for i in range(0,8):
 #    s.layer[0].setBit(i,0,0,10+5*(i-1))

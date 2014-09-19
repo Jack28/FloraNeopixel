@@ -138,8 +138,9 @@ class LEDlayer:
 
 #    def rotateColor(self):
 
-    def wheel(self,pos,intensity=1):
-        i = 256/self.NUM_LEDS*pos
+    def wheel(self,pos,intensity=1,ledCount=False):
+        ledCount = self.NUM_LEDS if not ledCount else ledCount
+        i = 256/ledCount*pos
         if i < 85:
             return ((i*3)/intensity,(255-i*3)/intensity,0)
         elif i < 170:
@@ -168,14 +169,14 @@ class LEDlayer:
             self.LEDstates[i]=()
 
     # unfinished
-    def transition(self,toLayer):
-        for i in range(0,20):
+    def transition(self,toLayer,steps=1):
+        for i in range(0,steps):
             for i in range(0,self.NUM_LEDS):
                 (r1,g1,b1) = self.LEDstates[i]
                 (r2,g2,b2) = toLayer.LEDstates[i]
-                r = r1+((r2-r1)/20)
-                g = g1+((g2-g1)/20)
-                b = b1+((b2-b1)/20)
+                r = r1+((r2-r1)/steps)
+                g = g1+((g2-g1)/steps)
+                b = b1+((b2-b1)/steps)
 
                 r = r if r>0 else r*-1
                 g = g if g>0 else g*-1
