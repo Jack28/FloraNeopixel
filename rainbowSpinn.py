@@ -20,7 +20,7 @@ newLayer2.rainbow(1)
 
 
 while True:
-    s.layer[0].transition(newLayer2)
+    s.layer[0].transition(newLayer2,4)
     s.show()
 
     newLayer2.shift(1)

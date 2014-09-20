@@ -30,62 +30,34 @@ void setup() {
   animationLoop();
 }
 
-char content[8] = {0};
-char character;
 int pos=0;
+char symbol=0;
 
 int digits[7]={0};
 
-void run(char* command){
-	// 2 3 3 3 --- 11
-//	Serial.print("command=");
-//	Serial.println(command);
-
-	if (command[0] == 's'){
-		strip.show();
-		return;
-	}
-
-//	command.toCharArray(buf,command.length()+1);
-	for (int i=0;i<7;i++){
-		digits[i]=command[i] - (command[i] >= 'a' ? 'a' - 10 : '0');
-//		Serial.print(".");
-//		Serial.print(digits[i]);
-//		Serial.print(".");
-		command[i]=0;
-	}
-
-	strip.setPixelColor(digits[0],strip.Color(
-		digits[1]*16+digits[2],
-		digits[3]*16+digits[4],
-		digits[5]*16+digits[6])
-	);
-}
 
 void loop()
 {
 	while(Serial.available()) {
-		character = Serial.read();
-		if (pos > 5 || character == 's'){
-			content[pos]=character;
-			run(content);
+		symbol = Serial.read();
+		digits[pos]=symbol - (symbol >= 'a' ? 'a' - 10 : '0');
+
+		if (symbol == 's'){
+			strip.show();
+			break;
+		}
+
+		if (pos > 5){
+			strip.setPixelColor(digits[0],strip.Color(
+				(digits[1]<<4)+digits[2],
+				(digits[3]<<4)+digits[4],
+				(digits[5]<<4)+digits[6])
+			);
 			pos=0;
 		} else
-			content[pos++]=character;
-
-//		Serial.println(pos);
-//		Serial.println(content);
+			pos++; 
 	}
 }
-
-//// Fill the dots one after the other with a color
-//void colorWipe(uint32_t c, uint8_t wait) {
-//  for(uint16_t i=0; i<strip.numPixels(); i++) {
-//      strip.setPixelColor(i, c);
-//      strip.show();
-//      delay(wait);
-//  }
-//}
 
 
 
