@@ -22,21 +22,6 @@ void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
 
-//  
-//	int c1=strip.Color(50,50,50);
-//	int c0=strip.Color(0,0,0);
-//	 for(int i=0;i<1024;i++){ // count from 0 to 1023
-//		int bin=log(i) / log(2); // get bit count
-//		for(int j=0;j<bin;j++){ // go from 0 to bit count
-//			if ((i>>(i-j))%2) // shift
-//    		 strip.setPixelColor(j,c1);
-//			else
-//    		 strip.setPixelColor(j,c0);
-//		}
-//		delay(50);
-//      strip.show();
-//	}
-//
   colorWipe(strip.Color(55,55,55),20);
   colorWipe(strip.Color(0,0,0),0);
   Serial.begin(9600);
@@ -45,44 +30,36 @@ void setup() {
   animationLoop();
 }
 
-String content = "";
+char content[8] = {0};
 char character;
 int pos=0;
 
-void run(String command){
+int digits[7]={0};
+
+void run(char* command){
 	// 2 3 3 3 --- 11
 //	Serial.print("command=");
 //	Serial.println(command);
-	if (command == "showxxx" || command == "s"){
+
+	if (command[0] == 's'){
 		strip.show();
 		return;
 	}
 
-	char buf[13]={0};
-	int digits[19]={0};
-	char tmp;
-	command.toCharArray(buf,command.length()+1);
-	for (int i=0;i<13;i++){
-		tmp=toupper(buf[i]);
-		digits[i]=(tmp >= 'A') ? tmp - 'A' + 10 : tmp -'0';
+//	command.toCharArray(buf,command.length()+1);
+	for (int i=0;i<7;i++){
+		digits[i]=command[i] - (command[i] >= 'a' ? 'a' - 10 : '0');
+//		Serial.print(".");
+//		Serial.print(digits[i]);
+//		Serial.print(".");
+		command[i]=0;
 	}
 
-	int led,r,g,b;
-	led=digits[0];
-	r=digits[1]*16+digits[2];
-	g=digits[3]*16+digits[4];
-	b=digits[5]*16+digits[6];
-
-////	sscanf(buf, "%1x%2x%2x%2x", &led,&r,&g,&b);
-//	Serial.print(led);
-//	Serial.print(" ");
-//	Serial.print(r);
-//	Serial.print(" ");
-//	Serial.print(g);
-//	Serial.print(" ");
-//	Serial.println(b);
-
-	strip.setPixelColor(led,strip.Color(r,g,b));
+	strip.setPixelColor(digits[0],strip.Color(
+		digits[1]*16+digits[2],
+		digits[3]*16+digits[4],
+		digits[5]*16+digits[6])
+	);
 }
 
 void loop()
@@ -90,17 +67,14 @@ void loop()
 	while(Serial.available()) {
 		character = Serial.read();
 		if (pos > 5 || character == 's'){
-			content.concat(character);
+			content[pos]=character;
 			run(content);
-			content="";
-			character=0;
 			pos=0;
-		} else {
-			content.concat(character);
-			pos++;
-		}
-//			Serial.println(pos);
-//			Serial.println(content);
+		} else
+			content[pos++]=character;
+
+//		Serial.println(pos);
+//		Serial.println(content);
 	}
 }
 

@@ -20,7 +20,9 @@ strip.show()
 # with layers
 # 1:48.88elapsed
 # with optimised layers
-# 0:13.31elapsed 
+# 0:13.31elapsed
+# more optimisations
+# 0:08.63elapsed
 
 for i in range(0,10000):
     strip.layer[0].setBit(i%16,i%255,i/40,0)

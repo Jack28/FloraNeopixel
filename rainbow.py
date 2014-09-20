@@ -17,4 +17,4 @@ while True:
         (r,g,b)=s.layer[0].wheel(i,1,250)
         s.layer[0].setRing(r,g,b)
         s.show()
-        sleep(.1)
+        sleep(.05)
