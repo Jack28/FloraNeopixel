@@ -6,12 +6,12 @@ import sys
 
 strip = strip.LEDstrip()
 
-if (sys.argv[1] == "ok"):
+if len(sys.argv) > 1 and sys.argv[1] == "ok":
     strip.layer[0].setRing(0,55,0)
     strip.show()
     sleep(0.2)
     strip.layer[0].dim(-65,0.03)
-if (sys.argv[1] == "no"):
+else:
     for i in range(0,3):
         strip.layer[0].setRing(55,0,0)
         strip.show()
@@ -19,4 +19,3 @@ if (sys.argv[1] == "no"):
         strip.clear()
         strip.show()
         sleep(0.2)
-

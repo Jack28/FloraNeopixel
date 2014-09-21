@@ -22,7 +22,7 @@ class LEDstrip:
                     self.ser.open()
             except:
                 print "ERROR opening serial connection"
-    #            sys.exit()
+                sys.exit()
         self.clear()
         self.show()
 

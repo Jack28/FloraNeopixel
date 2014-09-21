@@ -6,35 +6,44 @@ from threading import *
 import os
 
 
-s= strip.LEDstrip('/dev/ttyACM0',16,2)
+s=strip.LEDstrip('/dev/ttyACM0',16,2)
 
 s.clear()
-#s.setRing(0,0,240)#160-160/16*i)
+
+
+redSnake  =strip.LEDlayer(s)
+greenSnake=strip.LEDlayer(s)
+blueSnake =strip.LEDlayer(s)
+
+
 s.layer[0].setBits([0,1,2,3],50,0,0)
+redSnake.setBits  ([0,1,2,3],50,0,0)
+
 s.layer[1].setBits([0,1,2,3],0,50,0)
+greenSnake.setBits([0,1,2,3],0,50,0)
 
 s.layer.append(strip.LEDlayer(s))
-s.layer[2].setBits([0,1,2,3],00,00,50)
+s.layer[2].setBits([0,1,2,3],0,0,50)
+blueSnake.setBits ([0,1,2,3],0,0,50)
+
 
 s.show()
 
 def red():
     while True:
-        s.layer[0].shift(1)
-        s.show()
-        sleep(0.18)
+        redSnake.shift(1)
+        s.layer[0].transition(redSnake,steps=3)
+        sleep(0.02)
 
 def green():
     while True:
-        s.layer[1].shift(-2)
-        s.show()
-        sleep(0.2)
+        greenSnake.shift(-2)
+        s.layer[1].transition(greenSnake,steps=3)
 
 def blue():
     while True:
-        s.layer[2].shift(-1)
-        s.show()
-        sleep(0.22)
+        blueSnake.shift(-1)
+        s.layer[2].transition(blueSnake,steps=2)
 
 t1=Thread(target=red)
 t1.daemon=True

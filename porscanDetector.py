@@ -19,7 +19,7 @@ import strip
 ip_to_ports = dict()
 
 # Nr of ports in timespan seconds
-nr_of_diff_ports = 10
+nr_of_diff_ports = 20
 portscan_timespan = 10
 
 
