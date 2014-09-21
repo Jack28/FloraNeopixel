@@ -30,11 +30,10 @@ void setup() {
   animationLoop();
 }
 
-int pos=0;
+short pos=0;
 char symbol=0;
 
-int digits[7]={0};
-
+short digits[7]={0};
 
 void loop()
 {
@@ -42,20 +41,23 @@ void loop()
 		symbol = Serial.read();
 		digits[pos]=symbol - (symbol >= 'a' ? 'a' - 10 : '0');
 
-		if (symbol == 's'){
-			strip.show();
-			break;
+		switch (symbol){
+			case 's':
+				strip.show();
+				state=1;
+				break;
+			default:
+				if (pos > 5){
+					strip.setPixelColor(digits[0],strip.Color(
+						(digits[1]<<4)+digits[2],
+						(digits[3]<<4)+digits[4],
+						(digits[5]<<4)+digits[6])
+					);
+					pos=0;
+				} else
+					pos++; 
+				break;
 		}
-
-		if (pos > 5){
-			strip.setPixelColor(digits[0],strip.Color(
-				(digits[1]<<4)+digits[2],
-				(digits[3]<<4)+digits[4],
-				(digits[5]<<4)+digits[6])
-			);
-			pos=0;
-		} else
-			pos++; 
 	}
 }
 
