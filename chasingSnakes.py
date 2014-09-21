@@ -3,6 +3,7 @@
 import strip
 from time import sleep
 from threading import *
+import os
 
 
 s= strip.LEDstrip('/dev/ttyACM0',16,2)
@@ -17,31 +18,32 @@ s.layer[2].setBits([0,1,2,3],00,00,50)
 
 s.show()
 
-go=True
-
 def red():
-    while go:
+    while True:
         s.layer[0].shift(1)
         s.show()
-        sleep(0.2)
+        sleep(0.18)
 
-def blue():
-    while go:
+def green():
+    while True:
         s.layer[1].shift(-2)
         s.show()
         sleep(0.2)
 
-def green():
-    while go:
+def blue():
+    while True:
         s.layer[2].shift(-1)
         s.show()
-        sleep(0.2)
+        sleep(0.22)
 
 t1=Thread(target=red)
+t1.daemon=True
 t1.start()
-t2=Thread(target=blue)
-t2.start()
-t3=Thread(target=green)
-t3.start()
 
-raise SystemExit
+t2=Thread(target=blue)
+t2.daemon=True
+t2.start()
+
+green()
+
+os._exit(0)
