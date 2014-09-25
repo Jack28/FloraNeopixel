@@ -168,7 +168,6 @@ class LEDlayer:
             (r,g,b) = self.LEDstates[i]
             self.LEDstates[i]=()
 
-    # unfinished
     def transition(self,toLayer,steps=1):
         for i in range(0,steps):
             for i in range(0,self.NUM_LEDS):

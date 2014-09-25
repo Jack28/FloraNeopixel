@@ -37,6 +37,7 @@ short digits[7]={0};
 
 void loop()
 {
+START:
 	while(Serial.available()) {
 		symbol = Serial.read();
 		digits[pos]=symbol - (symbol >= 'a' ? 'a' - 10 : '0');
@@ -44,21 +45,21 @@ void loop()
 		switch (symbol){
 			case 's':
 				strip.show();
-				state=1;
-				break;
+goto START;
 			default:
-				if (pos > 5){
+				if (pos == 6){
+					pos=0;
 					strip.setPixelColor(digits[0],strip.Color(
 						(digits[1]<<4)+digits[2],
 						(digits[3]<<4)+digits[4],
 						(digits[5]<<4)+digits[6])
 					);
-					pos=0;
+goto START;
 				} else
 					pos++; 
-				break;
 		}
 	}
+goto START;
 }
 
 
