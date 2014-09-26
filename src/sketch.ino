@@ -45,6 +45,7 @@ START:
 		switch (symbol){
 			case 's':
 				strip.show();
+				pos=0;
 goto START;
 			default:
 				if (pos == 6){

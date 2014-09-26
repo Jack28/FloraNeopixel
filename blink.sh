@@ -58,7 +58,7 @@ function wheel(){
 	for i in `seq 0 9` a b c d e f
 	do
 		setColor $i $1 $2 $3
-#		sleep $4
+		sleep $4
 		show
 	done
 }
@@ -70,7 +70,7 @@ function wheel(){
 function colors(){
 	for i in `seq 1 $(($#/3))`
 	do
-		wheel $1 $2 $3 ".0"
+		wheel $1 $2 $3 ".05"
 		shift 3
 	done
 }

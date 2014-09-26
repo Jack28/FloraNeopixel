@@ -189,6 +189,13 @@ class LEDlayer:
         self.strip.update()
         self.strip.show()
 
+    def percent(self,percentage,r,g,b):
+        full = self.NUM_LEDS*percentage/100
+        part = self.NUM_LEDS*percentage/float(100)-full
+        self.setBits(range(0,full),r,g,b)
+        if part > 0:
+            self.setBit(full,r*part,g*part,b*part)
+
 
 
 if __name__ == "__main__":
