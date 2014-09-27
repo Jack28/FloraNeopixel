@@ -43,6 +43,9 @@ START:
 		digits[pos]=symbol - (symbol >= 'a' ? 'a' - 10 : '0');
 
 		switch (symbol){
+			case '.':
+				delay(10);
+goto START;
 			case 's':
 				strip.show();
 				pos=0;

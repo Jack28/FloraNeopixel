@@ -1,0 +1,7 @@
+# record
+./blueSpots.py | gzip > blueSpots.blink
+
+# play
+gunzip -c blueSpots.blink > /dev/ttyACM0
+
+while [ 1==1 ]; gunzip -c blueSpots.blink > /dev/ttyACM0; end

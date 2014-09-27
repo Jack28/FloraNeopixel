@@ -1,3 +1,0 @@
-ino build --cppflags="-fno-use-cxa-atexit -ffunction-sections -fdata-sections -g -Os -w" -m flora8
-ino clean
-ino upload -m flora8

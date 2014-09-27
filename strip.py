@@ -34,6 +34,13 @@ class LEDstrip:
         for i in self.layer:
             i.clear()
 
+    def pause(self,time):
+        for i in range(0,int(100*time)):
+            if not self.TTY == "-":
+                self.ser.write(".")
+            else:
+                sys.stdout.write(".")
+
     def clear(self):
         for i in self.layer:
             i.clear()
